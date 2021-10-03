@@ -1,0 +1,105 @@
+import * as React from "react";
+import 'react-native-gesture-handler';
+import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
+import {
+    Button,
+    TextInput,
+    Provider as PaperProvider,
+} from 'react-native-paper';
+
+
+export default class OpeningPage extends React.Component {
+    constructor(props) {
+        super(props);
+        console.log("adfasd");
+        this.state = {
+            isLoading: true,
+            dataSource: null,
+        }
+    }
+
+    componentDidMount () {
+        return fetch('https://api.shiftycrew.repl.co', {
+            node: 'cors',
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application.json',
+                "random": 123
+            },
+        })
+            .then ( (response) => response.json() )
+            .then ( (responseJson) => {
+                this.setState({
+                    isLoading: false,
+                    dataSource: {"foo":"bar"}
+                    //responseJson.movies,
+                })
+                
+            })
+
+
+            .catch((error) => {
+                console.log(error)
+            });
+    }
+
+    render() {
+        if(this.state.isLoading){
+            return (
+                <View style={styles.constainer}>
+                    <ActivityIndicator />
+                </View>
+            )
+        } else {
+            let movies = this.state.dataSource.map((val, key) => {
+                return <View key={key} style={styles.container}>
+                    <Text>{val.title}</Text>
+               </View>
+            });
+            return (
+                <View style={styles.container}>
+                    {movies}
+                </View>
+                // <PaperProvider>
+                //     <View style={styles.container}>
+                //     <Button color="#34568B" icon="account-outline" mode="contained" onPress= {()=> props.navigation.navigate("register")}>
+                //         Don't have an account yet?
+                //     </Button>
+                    
+                //     <TextInput label="Email" value={user} onChangeText={onChangeUser}/>
+                //     {/* <HelperText type="error" visible={hasErrors()}>
+                //         Email address is invalid!
+                //     </HelperText> */}
+                //     <TextInput secureTextEntry={true} label="Password" value={pass} onChangeText={onChangePass}/>
+                //     <Button color="#34568B" icon="account-check-outline" mode="contained" onPress= {()=> props.navigation.navigate("groups")}>
+                //         SIGNIN!
+                //     </Button>
+                //     </View>
+                // </PaperProvider>
+            );
+        }
+    }
+}
+
+    const styles = StyleSheet.create({
+        container: {
+            flex:1,
+            backgroundColor: 'black',
+            padding: 20,
+            margin: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+    })
+
+    // const [user, setUser] = React.useState('');
+    // const [pass, setPass] = React.useState('');
+    // const onChangeUser = user => setUser(user);
+    // const onChangePass = pass => setPass(pass);
+    
+    // const hasErrors = () => {
+    //     return !user.includes('@');
+    // };
+    
+

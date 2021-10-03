@@ -27,7 +27,7 @@ export default function Login(props) {
         <TextInput
           style={styles.TextInput}
           placeholder="Email."
-          placeholderTextColor="#003f5c"
+          placeholderTextColor="white"
           onChangeText={(email) => setEmail(email)}
         />
       </View>
@@ -36,7 +36,7 @@ export default function Login(props) {
         <TextInput
           style={styles.TextInput}
           placeholder="Password."
-          placeholderTextColor="#003f5c"
+          placeholderTextColor="white"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
         />
@@ -47,7 +47,13 @@ export default function Login(props) {
       </TouchableOpacity>
  
       <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText}>LOGIN</Text>
+
+      <Button
+          title= "SIGNIN"
+          onPress= {()=> props.navigation.navigate("grouplist")}>
+      </Button>
+
+        {/* { <Text style={styles.loginText}>LOGIN</Text> } */}
       </TouchableOpacity>
     </View>
   );
@@ -56,7 +62,7 @@ export default function Login(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#B0C4DE",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -64,7 +70,7 @@ const styles = StyleSheet.create({
 
  
   inputView: {
-    backgroundColor: "#FFC0CB",
+    backgroundColor: "#0000CD",
     borderRadius: 30,
     width: "70%",
     height: 45,
