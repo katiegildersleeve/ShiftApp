@@ -14,13 +14,17 @@ export default function App(props) {
   const [password, setPassword] = useState("");
 
 function componentDidMount(){
-    return fetch('https://api.shiftycrew.repl.co', {
+    return fetch('https://api.shiftycrew.repl.co/signin', {
         node: 'cors',
-        method: 'GET',
+        method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application.json',
             "random": 123
+        },
+        body: {
+            "x-user-username": email,
+            "x-user-password": password,
         }
     })
     .then ( (response) => response.json() )
@@ -36,7 +40,7 @@ function componentDidMount(){
         });
 }
     
-    componentDidMount();
+    // componentDidMount();
   return (
     <View style={styles.container}>
  
@@ -64,7 +68,9 @@ function componentDidMount(){
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
  
-      <Button color="#34568B" icon="account-check-outline" mode="contained" onPress= {()=> props.navigation.navigate("groups")}>
+{/*       <Button color="#34568B" icon="account-check-outline" mode="contained" onPress= {()=> props.navigation.navigate("groups")}> */}
+        
+        <Button color="#34568B" icon="account-check-outline" mode="contained" onPress= {componentDidMount}>
          SIGNIN!
       </Button>
     </View>
