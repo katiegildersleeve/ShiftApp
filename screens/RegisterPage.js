@@ -9,6 +9,7 @@ import {
     TextInput,
     Provider as PaperProvider,
 } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function OpeningPage(props){
