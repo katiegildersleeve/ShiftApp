@@ -5,13 +5,41 @@ import {
   Text,
   View,
   TextInput,
-  Button,
+  //Button,
   TouchableOpacity,
 } from "react-native";
+import {
+    Button,
+    HelperText,
+    Provider as PaperProvider,
+} from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
  
 export default function App(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState(false);
+  const storeData = async (key, value) => {
+    try {
+    await AsyncStorage.setItem(key, value)
+    } catch (e) {
+    // saving error
+    }
+  }
+var isLoggedIn = true;
+  
+const getData = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key)
+      if(value !== null) {
+        // value previously stored
+        isLoggedIn = true;
+      }
+    } catch(e) {
+      // error reading value
+    }
+  }
+  
 
 function componentDidMount(){
     return fetch('https://api.shiftycrew.repl.co/signin', {
@@ -19,20 +47,28 @@ function componentDidMount(){
         method: 'POST',
         headers: {
             Accept: 'application/json',
-            'Content-Type': 'application.json',
-            "random": 123
+            'Content-Type': 'application/json',
         },
-        body: {
-            "x-user-username": email,
-            "x-user-password": password,
-        }
+        body: JSON.stringify({
+           'x-user-username' : email,
+           'x-user-password' : password,
+        })
     })
     .then ( (response) => response.json() )
     .then ( (responseJson) => {
-            this.setState({
-                isLoading: false,
-                dataSource: responseJson.movies,
-            })
+
+            console.log(responseJson.result)
+            if(responseJson.result){
+                storeData('sessionKey', responseJson.session_id)
+                storeData('isLoggedIn', true)
+                console.log(getData('isLoggedIn'))
+                props.navigation.navigate("groups")
+            } else {
+                storeData('isLoggedIn', false)
+                storeData('sessionKey', null)
+                setErrors(true)
+                console.log("has errors" + errors)
+            }
             
         })
     .catch((error) => {
@@ -40,10 +76,19 @@ function componentDidMount(){
         });
 }
     
-    // componentDidMount();
+   async function isLoggedIn(){
+       if(getData('isLoggedIn'))
+        props.navigation.navigate("groups")
+}
+    
+console.log("help:" + isLoggedIn)
+if(isLoggedIn == false) {
   return (
+    <PaperProvider>
     <View style={styles.container}>
- 
+        <Button color="#34568B" icon="account-outline" mode="contained" onPress= {()=> props.navigation.navigate("register")}>
+                Don't have an account yet?
+        </Button>
       <StatusBar style="auto" />
       <View style={styles.inputView}>
         <TextInput
@@ -62,19 +107,25 @@ function componentDidMount(){
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
         />
-      </View>
- 
-      <TouchableOpacity>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
- 
-{/*       <Button color="#34568B" icon="account-check-outline" mode="contained" onPress= {()=> props.navigation.navigate("groups")}> */}
-        
-        <Button color="#34568B" icon="account-check-outline" mode="contained" onPress= {componentDidMount}>
-         SIGNIN!
-      </Button>
+      </View>     
+        <Button color="#34568B" icon="account-check-outline" mode="contained" onPress= {componentDidMount} >
+            SIGNIN!
+        </Button>
+        {errors ? <Text>Email address or password is invalid</Text> : null}
     </View>
+</PaperProvider>
   );
+} else { 
+    return (
+        <PaperProvider>
+         <View style={styles.container}>
+         <Button color="#34568B" icon="account-outline" mode="contained" onPress= {()=> props.navigation.navigate("groups")}>
+                 GO TO GROUPS
+         </Button>
+        </View>
+        </PaperProvider>
+    )
+    }
 }
  
 const styles = StyleSheet.create({
@@ -86,7 +137,6 @@ const styles = StyleSheet.create({
   },
  
 
- 
   inputView: {
     backgroundColor: "#FFC0CB",
     borderRadius: 30,
@@ -109,151 +159,3 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
 })
-
-// //import * as React from "react";
-// import 'react-native-gesture-handler';
-// import {
-//     Button,
-//     TextInput,
-//     Provider as PaperProvider,
-// } from 'react-native-paper';
-// import { StatusBar } from "expo-status-bar";
-// import React, { useState } from "react";
-// import {
-//   StyleSheet,
-//   Text,
-//   View,
-//   TouchableOpacity,
-// } from "react-native";
-
-//         export default function OpeningPage(){
-//             const [user, setUser] = useState("");
-//             const [password, setPassword] = useState("");
-//         return(
-//             <View>
-//                 <TextInput
-//                 placeholder="Username"
-//                 onChangeText={(user) => setUser(user)}
-//                 />
-//                 <TextInput
-//                 placeholder="Password"
-//                 secureTextEntry={true}
-//                 onChangeText={(password) => setPassword(password)}
-//                 />
-            
-//             <TouchableOpacity>
-//                 <Text>Forgot Password?</Text>
-//             </TouchableOpacity>
-//             </View>
-//         );
-//         }
-// const styles = StyleSheet.create({
-//     container: {
-//         flex:1,
-//         backgroundColor: 'white',
-//         padding: 20,
-//         margin: 10,
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//     },
-// })
-
-// // const hasErrors = () => {
-// //     return !user.includes('@');
-// // };
-
-// function Login() {
-//     const [user, setUser] = React.useState('');
-//     const [pass, setPass] = React.useState('');
-//     const onChangeUser = user => setUser(user);
-//     const onChangePass = pass => setPass(pass);
-//     return(
-//         <PaperProvider>
-//             <View style={styles.container}>
-//             <Button color="#34568B" icon="account-outline" mode="contained" onPress= {()=> props.navigation.navigate("register")}>
-//                 Don't have an account yet?
-//             </Button>
-//             {movies}
-            
-//             <TextInput label="Email" value={user} onChangeText={onChangeUser}/>
-//             {/* <HelperText type="error" visible={hasErrors()}>
-//                 Email address is invalid!
-//             </HelperText> */}
-//             <TextInput secureTextEntry={true} label="Password" value={pass} onChangeText={onChangePass}/>
-//             <Button color="#34568B" icon="account-check-outline" mode="contained" onPress= {()=> props.navigation.navigate("groups")}>
-//                 SIGNIN!
-//             </Button>
-//             </View>
-//         </PaperProvider>
-//     )
-// }
-
-// export default class OpeningPage extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         console.log("adfasd");
-//         this.state = {
-//             isLoading: true,
-//             dataSource: null,
-//         }
-//     }
-
-//     componentDidMount () {
-//         return fetch('https://api.shiftycrew.repl.co', {
-//             node: 'cors',
-//             method: 'GET',
-//             headers: {
-//                 Accept: 'application/json',
-//                 'Content-Type': 'application.json',
-//                 "random": 123
-//             }
-//         })
-//             .then ( (response) => response.json() )
-//             .then ( (responseJson) => {
-//                 this.setState({
-//                     isLoading: false,
-//                     dataSource: responseJson.movies,
-//                 })
-                
-//             })
-//             .catch((error) => {
-//                 console.log(error)
-//             });
-//     }
-
-//     render() {
-//         if(this.state.isLoading){
-//             return (
-//                 <View style={styles.constainer}>
-//                     <ActivityIndicator />
-//                 </View>
-//             )
-//         } else {
-//             let movies = this.state.dataSource.map((val, key) => {
-//                 return <View key={key} style={styles.container}>
-//                     <Text>{val.title}</Text>
-//                </View>
-//             });
-//             return Login();
-
-//                 // <PaperProvider>
-//                 //     <View style={styles.container}>
-//                 //     <Button color="#34568B" icon="account-outline" mode="contained" onPress= {()=> props.navigation.navigate("register")}>
-//                 //         Don't have an account yet?
-//                 //     </Button>
-//                 //     {movies}
-                    
-//                 //     <TextInput label="Email" value={user} onChangeText={onChangeUser}/>
-//                 //     {/* <HelperText type="error" visible={hasErrors()}>
-//                 //         Email address is invalid!
-//                 //     </HelperText> */}
-//                 //     <TextInput secureTextEntry={true} label="Password" value={pass} onChangeText={onChangePass}/>
-//                 //     <Button color="#34568B" icon="account-check-outline" mode="contained" onPress= {()=> props.navigation.navigate("groups")}>
-//                 //         SIGNIN!
-//                 //     </Button>
-//                 //     </View>
-//                 // </PaperProvider>
-            
-//         }
-//     }
-// 
