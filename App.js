@@ -12,6 +12,11 @@ import MainScreen from './screens/MainScreen';
 import Employer from './screens/Employer';
 import Employee from './screens/Employee';
 import Ag from './screens/Ag';
+import GroupSignUp from './screens/GroupSignUp';
+import GroupSettings from './screens/GroupSettings';
+import Request from './screens/Request';
+import ScheduleShift from './screens/ScheduleShift';
+import ShiftList from './screens/ShiftList';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +43,11 @@ export default function App() {
          <Stack.Screen name="employee" component={Employee} />
          <Stack.Screen name="employer" component={Employer} />
          <Stack.Screen name="agenda" component={Ag} />
+         <Stack.Screen name="groupsignup" component={GroupSignUp} />
+         <Stack.Screen name="settings" component={GroupSettings} />
+         <Stack.Screen name="requestOff" component={Request} />
+         <Stack.Screen name="schedule" component={ScheduleShift} />
+         <Stack.Screen name="shifts" component={ShiftList} />
        </Stack.Navigator>
      </NavigationContainer>
     </PaperProvider>

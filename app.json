@@ -1,5 +1,6 @@
 {
   "expo": {
+    "userInterfaceStyle": "authomatic",
     "name": "ShiftApp",
     "slug": "ShiftApp",
     "version": "1.0.0",

@@ -26,7 +26,7 @@ export default function App(props) {
     // saving error
     }
   }
-var isLoggedIn = true;
+var isLoggedIn = false;
   
 const getData = async (key) => {
     try {
@@ -135,7 +135,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
- 
 
   inputView: {
     backgroundColor: "#FFC0CB",
