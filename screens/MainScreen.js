@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Modal, Portal, Text, Provider, List, Provider as PaperProvider } from 'react-native-paper';
+import { Modal, Portal, Text, Provider, List, Provider as PaperProvider, Button } from 'react-native-paper';
 import {CalendarList } from 'react-native-calendars';
-import { View, StyleSheet, Button, Platform } from 'react-native';
+import { View, StyleSheet,  Platform } from 'react-native';
 import {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -124,7 +124,7 @@ export default function MainGroup(props){
                         
                     </Modal>
                 </Portal> */}
-                <Button style={{marginTop: 30}} onPress= {()=> props.navigation.navigate("requestOff", props.route.params)}>
+                <Button backgroundColor= 'red' style={{marginTop: 30}} onPress= {()=> props.navigation.navigate("requestOff", props.route.params)}>
                     <Text color='white'>Request Off</Text>
                 </Button>
                 <CalendarList 
