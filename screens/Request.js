@@ -127,7 +127,7 @@ export default function Request(props) {
         
       </Button>
 
-        {/* { <Text style={styles.loginText}>LOGIN</Text> } */}
+       
       </TouchableOpacity>
     </View>
   );
